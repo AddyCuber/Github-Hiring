@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fdfcf9;
+  --foreground: #1a1a1a;
+  --primary: #d97706;
+  --primary-muted: #fef3c7;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --accent: #d97706;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* Retro Professional Utilities */
+.retro-border {
+  border: 1px solid var(--foreground);
+}
+
+.retro-shadow {
+  box-shadow: 2px 2px 0px 0px var(--foreground);
+}
+
+.retro-shadow-orange {
+  box-shadow: 2px 2px 0px 0px var(--primary);
+}
+
+.retro-card {
+  background: white;
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retro-card:hover {
+  border-color: var(--foreground);
+  box-shadow: 4px 4px 0px 0px var(--foreground);
+  transform: translate(-2px, -2px);
+}
+
+.retro-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-weight: 700;
+  border: 1.5px solid var(--foreground);
+  background: white;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.retro-button:hover {
+  background: var(--muted);
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0px 0px var(--foreground);
+}
+
+.retro-button-primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.retro-button-primary:hover {
+  background: #b45309;
+  border-color: #b45309;
+  box-shadow: 2px 2px 0px 0px var(--foreground);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.bg-retro-orange {
+  background-color: var(--primary);
+}
+
+.bg-retro-bone {
+  background-color: var(--background);
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ybe-check": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "ybe_check.mcp_server"
+      ]
+    }
+  }
+}
