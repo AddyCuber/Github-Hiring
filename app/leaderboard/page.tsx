@@ -43,19 +43,19 @@ export default async function LeaderboardPage({
   const slot = isPlaceholderMode()
     ? getPlaceholderSlot("leaderboard_banner")
     : await (async () => {
-        const supabase = createAdminSupabaseClient()
-        if (!supabase) return getPlaceholderSlot("leaderboard_banner")
-        const { data } = await supabase
-          .from("sponsored_slots")
-          .select("*")
-          .eq("placement_key", "leaderboard_banner")
-          .eq("is_active", true)
-          .lte("starts_at", new Date().toISOString())
-          .gte("ends_at", new Date().toISOString())
-          .limit(1)
-          .maybeSingle()
-        return data || null
-      })()
+      const supabase = createAdminSupabaseClient()
+      if (!supabase) return getPlaceholderSlot("leaderboard_banner")
+      const { data } = await supabase
+        .from("sponsored_slots")
+        .select("*")
+        .eq("placement_key", "leaderboard_banner")
+        .eq("is_active", true)
+        .lte("starts_at", new Date().toISOString())
+        .gte("ends_at", new Date().toISOString())
+        .limit(1)
+        .maybeSingle()
+      return data || null
+    })()
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -77,12 +77,21 @@ export default async function LeaderboardPage({
       <LeaderboardTable rows={rows} showExact={false} />
       {slot && <div className="mt-6"><SponsoredSlotCard slot={slot} /></div>}
 
-      <section className="mt-8 rounded-xl border border-dashed border-border bg-white p-5">
-        <h2 className="text-lg font-bold">Hire From This Leaderboard</h2>
-        <p className="mt-2 text-sm text-slate-600">Use recruiter filters to shortlist maintainers by MRR, total earnings, and availability.</p>
-        <Link href="/recruiters" className="mt-3 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white">
-          Open Recruiter Dashboard
-        </Link>
+      <section className="mt-8 grid gap-4 md:grid-cols-2">
+        <div className="rounded-xl border border-dashed border-border bg-white p-5">
+          <h2 className="text-lg font-bold">Hire From This Leaderboard</h2>
+          <p className="mt-2 text-sm text-slate-600">Use recruiter filters to shortlist maintainers by MRR, total earnings, and availability.</p>
+          <Link href="/recruiters" className="mt-3 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white">
+            Open Recruiter Dashboard
+          </Link>
+        </div>
+        <div className="rounded-xl border border-primary bg-primary-muted p-5">
+          <h2 className="text-lg font-bold">Hiring OSS Developers?</h2>
+          <p className="mt-2 text-sm text-slate-600">Post a job listing and reach every developer on this leaderboard. $299/mo.</p>
+          <Link href="/jobs/post" className="mt-3 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white">
+            Post a Job
+          </Link>
+        </div>
       </section>
     </div>
   )

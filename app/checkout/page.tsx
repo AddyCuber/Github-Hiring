@@ -14,8 +14,8 @@ type PlanType = "pro_dev" | "recruiter" | "enterprise"
 
 const PLAN_CONFIG: Record<PlanType, { label: string; amount: number; description: string }> = {
   pro_dev: { label: "Pro Dev", amount: 49900, description: "$5/mo equivalent billed in INR" },
-  recruiter: { label: "Recruiter", amount: 499900, description: "$49/mo equivalent billed in INR" },
-  enterprise: { label: "Enterprise", amount: 1999900, description: "$199/mo equivalent billed in INR" }
+  recruiter: { label: "Recruiter", amount: 2999900, description: "$299/mo equivalent billed in INR" },
+  enterprise: { label: "Enterprise", amount: 9999900, description: "$999/mo equivalent billed in INR" }
 }
 
 export default function CheckoutPage() {
@@ -109,8 +109,8 @@ export default function CheckoutPage() {
             onChange={(e) => setPlanType(e.target.value as PlanType)}
           >
             <option value="pro_dev">Pro Dev ($5/mo)</option>
-            <option value="recruiter">Recruiter ($49/mo)</option>
-            <option value="enterprise">Enterprise ($199/mo)</option>
+            <option value="recruiter">Recruiter ($299/mo)</option>
+            <option value="enterprise">Enterprise ($999/mo)</option>
           </select>
 
           <p className="mt-2 text-sm text-slate-600">{PLAN_CONFIG[planType].description}</p>

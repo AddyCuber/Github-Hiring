@@ -80,32 +80,48 @@ export default async function HomePage() {
         <LeaderboardTable rows={topTen} showExact={false} />
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-4">
         <div className="rounded-xl border border-border bg-white p-6">
           <h3 className="text-xl font-bold">Free</h3>
           <p className="mt-2 text-3xl font-black">$0</p>
-          <p className="mt-2 text-sm text-slate-600">Leaderboard visibility and profile with earnings ranges.</p>
+          <p className="mt-2 text-sm text-slate-600">Leaderboard visibility, profile with earnings tiers, and embed widget.</p>
+          <Link href="/verify" className="cursor-target mt-4 inline-block rounded-md border border-border px-4 py-2 font-semibold">
+            Claim Profile
+          </Link>
         </div>
-        <div className="rounded-xl border border-border bg-white p-6">
+        <div className="rounded-xl border border-primary bg-primary-muted p-6">
           <h3 className="text-xl font-bold">Pro Dev</h3>
           <p className="mt-2 text-3xl font-black">$5/mo</p>
-          <p className="mt-2 text-sm text-slate-600">Exact earnings, hire/sponsor flags, portfolio/testimonials, embed widget.</p>
-          <Link href="/pro" className="cursor-target mt-4 inline-block rounded-md bg-primary px-4 py-2 text-white">
+          <p className="mt-2 text-sm text-slate-600">Exact earnings, hire/sponsor flags, portfolio, testimonials, priority placement.</p>
+          <Link href="/checkout?plan=pro_dev" className="cursor-target mt-4 inline-block rounded-md bg-primary px-4 py-2 text-white">
             Upgrade
           </Link>
         </div>
         <div className="rounded-xl border border-border bg-white p-6">
+          <h3 className="text-xl font-bold">Job Listing</h3>
+          <p className="mt-2 text-3xl font-black">$299/mo</p>
+          <p className="mt-2 text-sm text-slate-600">Post a job and reach verified OSS maintainers and recruiters.</p>
+          <Link href="/jobs/post" className="cursor-target mt-4 inline-block rounded-md bg-primary px-4 py-2 text-white">
+            Post a Job
+          </Link>
+        </div>
+        <div className="rounded-xl border border-border bg-white p-6">
           <h3 className="text-xl font-bold">Recruiter</h3>
-          <p className="mt-2 text-3xl font-black">$49-$199/mo</p>
-          <p className="mt-2 text-sm text-slate-600">Talent filtering, shortlist export workflows, and enterprise access.</p>
-          <Link href="/recruiters" className="cursor-target mt-4 inline-block rounded-md bg-success px-4 py-2 text-white">
-            Request access
+          <p className="mt-2 text-3xl font-black">$299/mo</p>
+          <p className="mt-2 text-sm text-slate-600">Talent filtering, contact info, shortlist exports, and API access.</p>
+          <Link href="/recruiters" className="cursor-target mt-4 inline-block rounded-md bg-primary px-4 py-2 text-white">
+            Start Hiring
           </Link>
         </div>
       </section>
 
       <section className="rounded-xl border border-border bg-white p-6">
-        <h3 className="text-xl font-bold">Sponsored Jobs</h3>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-xl font-bold">Sponsored Jobs</h3>
+          <Link href="/jobs/post" className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white">
+            Post a Job — $299/mo
+          </Link>
+        </div>
         <div className="mt-4 space-y-2">
           {jobs.map((job: any) => (
             <div key={job.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border px-4 py-3">

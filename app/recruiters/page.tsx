@@ -85,7 +85,7 @@ export default async function RecruitersPage({ searchParams }: { searchParams: {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
         <section className="space-y-3">
-          {data.map((dev: any) => (
+          {data.slice(0, 3).map((dev: any) => (
             <article key={dev.id} className="rounded-xl border border-border bg-white p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
@@ -107,6 +107,33 @@ export default async function RecruitersPage({ searchParams }: { searchParams: {
               </div>
             </article>
           ))}
+
+          {data.length > 3 && (
+            <div className="relative">
+              <div className="pointer-events-none space-y-3 blur-sm">
+                {data.slice(3, 6).map((dev: any) => (
+                  <article key={dev.id} className="rounded-xl border border-border bg-white p-4">
+                    <div className="flex items-center gap-3">
+                      <Image src={dev.avatar_url || "https://avatars.githubusercontent.com/u/0?v=4"} alt={dev.github_username} width={48} height={48} className="rounded-full" />
+                      <div>
+                        <h2 className="font-bold text-primary">{dev.name || dev.github_username}</h2>
+                        <p className="text-sm text-slate-600">{dev.primary_language || "Unknown stack"}</p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="rounded-xl border border-primary bg-white p-6 text-center shadow-lg">
+                  <h3 className="text-lg font-bold">Unlock {data.length - 3} More Developers</h3>
+                  <p className="mt-2 text-sm text-slate-600">Subscribe to see all talent with full contact details, filters, and export.</p>
+                  <Link href="/checkout?plan=recruiter" className="mt-4 inline-block rounded-md bg-primary px-5 py-2.5 font-semibold text-white">
+                    Subscribe — $299/mo
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         <aside className="space-y-4">
@@ -114,8 +141,11 @@ export default async function RecruitersPage({ searchParams }: { searchParams: {
 
           <section className="rounded-xl border border-border bg-white p-4 text-sm">
             <h3 className="font-bold">Pricing</h3>
-            <p className="mt-2">Recruiter: $49/mo</p>
-            <p>Enterprise: $199/mo</p>
+            <p className="mt-2">Recruiter: $299/mo</p>
+            <p>Enterprise: $999/mo</p>
+            <Link href="/checkout?plan=recruiter" className="mt-3 inline-block rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white">
+              Subscribe
+            </Link>
           </section>
 
           <RecruiterLeadForm />

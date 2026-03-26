@@ -6,11 +6,11 @@ import { getPlaceholderUserByGithubId, isPlaceholderMode, placeholderUsers } fro
 import { createAdminSupabaseClient } from "@/lib/supabase"
 
 function verifySignature(orderId: string, paymentId: string, signature: string) {
-  const secret = process.env.RAZORPAY_KEY_SECRET || ""
-  if (!secret) return true
+  const secret = process.env.RAZORPAY_KEY_SECRET
+  if (!secret) return false
   const payload = `${orderId}|${paymentId}`
   const expected = crypto.createHmac("sha256", secret).update(payload).digest("hex")
-  return expected === signature
+  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))
 }
 
 export async function POST(request: Request) {
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     const { data: payment, error: paymentLookupError } = await supabase
       .from("payments")
-      .select("id, user_id, plan_type, payer_company, payer_email")
+      .select("id, user_id, plan_type, payer_company, payer_email, metadata")
       .eq("razorpay_order_id", body.razorpay_order_id)
       .single()
 
@@ -104,6 +104,25 @@ export async function POST(request: Request) {
 
       await supabase.rpc("refresh_leaderboard")
       return NextResponse.json({ success: true, username: user.github_username, planType: payment.plan_type })
+    }
+
+    if (payment.plan_type === "job_listing") {
+      const meta = (payment.metadata || {}) as Record<string, string | null>
+      const { error: jobError } = await supabase.from("job_listings").insert({
+        company_name: payment.payer_company || "Unknown Company",
+        title: meta.job_title || "Open Position",
+        location: meta.job_location || null,
+        salary_range: meta.job_salary_range || null,
+        apply_url: meta.job_apply_url || "#",
+        description: meta.job_description || null,
+        is_active: true
+      })
+
+      if (jobError) {
+        return NextResponse.json({ error: jobError.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ success: true, planType: "job_listing" })
     }
 
     const startsAt = new Date()

@@ -61,6 +61,7 @@ ALTER TABLE payments ADD COLUMN IF NOT EXISTS plan_type VARCHAR(50) DEFAULT 'pro
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS payer_type VARCHAR(30) DEFAULT 'developer';
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS payer_email VARCHAR(255);
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS payer_company VARCHAR(255);
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}'::jsonb;
 
 CREATE TABLE IF NOT EXISTS recruiter_subscriptions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

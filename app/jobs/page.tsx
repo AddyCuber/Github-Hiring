@@ -22,8 +22,15 @@ export default async function JobsPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="text-4xl font-black tracking-tight">OSS Talent Job Board</h1>
-      <p className="mt-2 text-slate-600">Sponsored jobs targeting maintainers with proven OSS monetization.</p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-black tracking-tight">OSS Talent Job Board</h1>
+          <p className="mt-2 text-slate-600">Sponsored jobs targeting maintainers with proven OSS monetization.</p>
+        </div>
+        <Link href="/jobs/post" className="rounded-md bg-primary px-5 py-3 font-semibold text-white">
+          Post a Job — $299/mo
+        </Link>
+      </div>
 
       <div className="mt-6 space-y-3">
         {jobs.map((job: any) => (

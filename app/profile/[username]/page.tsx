@@ -26,6 +26,10 @@ export default async function ProfilePage({ params }: { params: { username: stri
             <pre className="mt-3 overflow-x-auto rounded-md bg-slate-100 p-3 text-xs">
 {`<iframe src="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/embed/${placeholderUser.github_username}" width="420" height="220"></iframe>`}
             </pre>
+            <h2 className="mt-4 font-bold">GitHub README Badge</h2>
+            <pre className="mt-3 overflow-x-auto rounded-md bg-slate-100 p-3 text-xs">
+{`[![SponsorsRank](${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/badge/${placeholderUser.github_username})](${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile/${placeholderUser.github_username})`}
+            </pre>
           </section>
         </div>
         {isOwner && <div className="mt-6"><DeveloperPreferencesForm user={placeholderUser} /></div>}
@@ -64,6 +68,10 @@ export default async function ProfilePage({ params }: { params: { username: stri
           <h2 className="font-bold">Shareable Embed</h2>
           <pre className="mt-3 overflow-x-auto rounded-md bg-slate-100 p-3 text-xs">
 {`<iframe src="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/embed/${user.github_username}" width="420" height="220"></iframe>`}
+          </pre>
+          <h2 className="mt-4 font-bold">GitHub README Badge</h2>
+          <pre className="mt-3 overflow-x-auto rounded-md bg-slate-100 p-3 text-xs">
+{`[![SponsorsRank](${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/badge/${user.github_username})](${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile/${user.github_username})`}
           </pre>
         </section>
       </div>
