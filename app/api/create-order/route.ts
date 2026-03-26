@@ -74,6 +74,14 @@ export async function POST(request: Request) {
           { status: 400 }
         )
       }
+      try {
+        const url = new URL(body.jobApplyUrl)
+        if (!["http:", "https:"].includes(url.protocol)) {
+          return NextResponse.json({ error: "Apply URL must be http or https" }, { status: 400 })
+        }
+      } catch {
+        return NextResponse.json({ error: "Invalid apply URL" }, { status: 400 })
+      }
     } else if (!body.companyName || !body.contactEmail) {
       return NextResponse.json(
         { error: "companyName and contactEmail are required for recruiter plans" },

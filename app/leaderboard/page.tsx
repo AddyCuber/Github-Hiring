@@ -20,7 +20,7 @@ async function getLeaderboard(sort: "total" | "mrr") {
       .select(
         "id, github_username, name, avatar_url, total_earnings_usd, monthly_recurring_usd, sponsor_count, is_verified, has_verified_badge"
       )
-      .eq("is_verified", true)
+      .or("sponsor_count.gt.0,is_verified.eq.true")
       .order("monthly_recurring_usd", { ascending: false })
       .limit(100)
 
@@ -62,7 +62,7 @@ export default async function LeaderboardPage({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-4xl font-black tracking-tight">GitHub Sponsors Leaderboard</h1>
-          <p className="mt-2 text-slate-600">Top 100 verified developers by Sponsors earnings.</p>
+          <p className="mt-2 text-slate-600">Top 100 developers ranked by GitHub Sponsors activity.</p>
         </div>
         <div className="flex gap-2 text-sm font-semibold">
           <Link href="/leaderboard?sort=total" className={`rounded-md px-3 py-2 ${sort === "total" ? "bg-primary text-white" : "border border-border bg-white"}`}>

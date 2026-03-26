@@ -44,12 +44,16 @@ export async function POST(request: Request) {
 
     const { data: payment, error: paymentLookupError } = await supabase
       .from("payments")
-      .select("id, user_id, plan_type, payer_company, payer_email, metadata")
+      .select("id, user_id, plan_type, payer_company, payer_email, metadata, status")
       .eq("razorpay_order_id", body.razorpay_order_id)
       .single()
 
     if (paymentLookupError || !payment) {
       return NextResponse.json({ error: "Payment record not found" }, { status: 404 })
+    }
+
+    if (payment.status === "success") {
+      return NextResponse.json({ success: true, message: "Already processed" })
     }
 
     if (payment.plan_type === "pro_dev" && !session?.githubId) {

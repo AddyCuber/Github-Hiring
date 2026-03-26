@@ -80,7 +80,6 @@ const KNOWN_SPONSORED_DEVS = [
   "nushell",
   "helix-editor",
   "ajeetdsouza",
-  "sharkdp",
   "casey",
   "astral-sh",
   "charliermarsh",
@@ -94,6 +93,9 @@ const KNOWN_SPONSORED_DEVS = [
   "jazzband",
 ]
 
+// NOTE: monthlyEstimatedSponsorsIncomeInCents is only visible to the account owner.
+// For third-party queries it returns 0. We use sponsor count as the public signal
+// and set MRR/total to 0 — real earnings populate when devs verify via OAuth.
 const GRAPHQL_QUERY = `
 query($login: String!) {
   user(login: $login) {
@@ -105,16 +107,23 @@ query($login: String!) {
     url
     location
     hasSponsorsListing
-    monthlyEstimatedSponsorsIncomeInCents
     sponsors {
       totalCount
     }
-    repositories(first: 1, orderBy: {field: STARGAZERS, direction: DESC}) {
+    sponsorsListing {
+      fullDescription
+    }
+    repositories(first: 3, orderBy: {field: STARGAZERS, direction: DESC}) {
+      totalCount
       nodes {
+        stargazerCount
         primaryLanguage {
           name
         }
       }
+    }
+    followers {
+      totalCount
     }
   }
 }
@@ -124,7 +133,7 @@ async function fetchUser(login) {
   const res = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
-      Authorization: `bearer ${GITHUB_TOKEN}`,
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ query: GRAPHQL_QUERY, variables: { login } })
@@ -171,13 +180,13 @@ async function main() {
         continue
       }
 
-      const mrrCents = user.monthlyEstimatedSponsorsIncomeInCents || 0
-      const mrrUsd = Math.round(mrrCents / 100)
-      // Estimate total earnings as ~12x MRR (rough heuristic for active sponsors)
-      const estimatedTotal = mrrUsd * 12
       const sponsorCount = user.sponsors?.totalCount || 0
+      const totalStars = (user.repositories?.nodes || []).reduce((sum, r) => sum + (r.stargazerCount || 0), 0)
       const primaryLanguage = user.repositories?.nodes?.[0]?.primaryLanguage?.name || null
+      const followers = user.followers?.totalCount || 0
 
+      // MRR and total earnings are private — only populated when devs verify via OAuth.
+      // We set them to 0 here. Sponsor count + stars serve as the public ranking signal.
       const { error } = await supabase.from("users").upsert(
         {
           github_id: user.databaseId,
@@ -186,8 +195,8 @@ async function main() {
           avatar_url: user.avatarUrl,
           bio: user.bio,
           github_url: user.url,
-          total_earnings_usd: estimatedTotal,
-          monthly_recurring_usd: mrrUsd,
+          total_earnings_usd: 0,
+          monthly_recurring_usd: 0,
           sponsor_count: sponsorCount,
           is_verified: false,
           has_verified_badge: false,
@@ -203,7 +212,7 @@ async function main() {
         console.error(`  ${login}: DB error — ${error.message}`)
         errored++
       } else {
-        console.log(`  ${login}: MRR $${mrrUsd}, ${sponsorCount} sponsors, ${primaryLanguage || "unknown lang"}`)
+        console.log(`  ${login}: ${sponsorCount} sponsors, ${totalStars} stars, ${followers} followers, ${primaryLanguage || "??"}`)
         inserted++
       }
 

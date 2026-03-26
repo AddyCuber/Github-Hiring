@@ -15,3 +15,15 @@ export function encryptText(plain: string) {
   const encrypted = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()])
   return `${iv.toString("hex")}:${encrypted.toString("hex")}`
 }
+
+export function decryptText(ciphertext: string) {
+  const [ivHex, encHex] = ciphertext.split(":")
+  if (!ivHex || !encHex) {
+    throw new Error("Invalid ciphertext format")
+  }
+  const iv = Buffer.from(ivHex, "hex")
+  const key = getKey()
+  const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv)
+  const decrypted = Buffer.concat([decipher.update(Buffer.from(encHex, "hex")), decipher.final()])
+  return decrypted.toString("utf8")
+}

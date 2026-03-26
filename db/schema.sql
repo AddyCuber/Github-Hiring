@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS job_listings (
 DROP MATERIALIZED VIEW IF EXISTS leaderboard_rankings;
 CREATE MATERIALIZED VIEW leaderboard_rankings AS
 SELECT
-  ROW_NUMBER() OVER (ORDER BY total_earnings_usd DESC) AS rank,
+  ROW_NUMBER() OVER (ORDER BY sponsor_count DESC, total_earnings_usd DESC) AS rank,
   id,
   github_username,
   name,
@@ -128,8 +128,8 @@ SELECT
   is_verified,
   has_verified_badge
 FROM users
-WHERE is_verified = TRUE
-ORDER BY total_earnings_usd DESC
+WHERE sponsor_count > 0 OR is_verified = TRUE
+ORDER BY sponsor_count DESC, total_earnings_usd DESC
 LIMIT 100;
 
 CREATE OR REPLACE VIEW recruiter_talent_view AS
@@ -148,8 +148,8 @@ SELECT
   open_to_sponsorship,
   has_verified_badge
 FROM users
-WHERE is_verified = TRUE
-ORDER BY monthly_recurring_usd DESC;
+WHERE sponsor_count > 0 OR is_verified = TRUE
+ORDER BY sponsor_count DESC, monthly_recurring_usd DESC;
 
 CREATE INDEX IF NOT EXISTS idx_users_github_id ON users(github_id);
 CREATE INDEX IF NOT EXISTS idx_users_earnings ON users(total_earnings_usd DESC);
